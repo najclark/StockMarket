@@ -7,13 +7,14 @@ public class Portfolio {
 
 	private double money = 0;
 	private int stocks = 0;
+	private int transactionFee = 7;
 
 	public Portfolio(double money) {
 		this.money = money;
 	}
 
 	public double buyStocks(double price, int quantity) throws InsufficientFundsException {
-		double subtotal = price * quantity;
+		double subtotal = price * quantity + transactionFee;
 		if (subtotal <= money) {
 			money -= subtotal;
 			stocks += quantity;
@@ -24,8 +25,8 @@ public class Portfolio {
 	}
 
 	public double sellStocks(double price, int quantity) throws InsufficientStockQuantity {
-		double balance = price * quantity;
-		if (quantity <= stocks && quantity > 0) {
+		double balance = price * quantity - transactionFee;
+		if (quantity <= stocks && quantity >= 0) {
 			money += balance;
 			stocks -= quantity;
 			return money;
@@ -36,7 +37,7 @@ public class Portfolio {
 	}
 
 	public double buyMaxStocks(double price) {
-		int quantity = (int) Math.floor(money / price);
+		int quantity = (int) Math.floor((money - transactionFee) / price);
 		try {
 			buyStocks(price, quantity);
 			return quantity;
@@ -57,6 +58,14 @@ public class Portfolio {
 		return money;
 	}
 
+	public int getTransactionFee(){
+		return transactionFee;
+	}
+	
+	public void setTransactionFee(int fee){
+		this.transactionFee = fee;
+	}
+	
 	public double getMoney() {
 		return money;
 	}
